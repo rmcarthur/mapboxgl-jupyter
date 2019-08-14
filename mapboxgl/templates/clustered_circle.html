@@ -2,13 +2,13 @@
 
 <!-- update legend item key style -->
 {% block extra_css %}
-    .gradient-bar.bordered, .legend-key.bordered { border: solid {{ strokeColor }} {{ strokeWidth }}px; }
+    .gradient-bar.bordered, .legend-key.bordered { border: solid {{ stroke_color }} {{ color_width }}px; }
 {% endblock extra_css %}
 
 {% block extra_javascript %}
     
-    {% if showLegend %}
-        calcColorLegend({{ colorStops }}, "Point Density", {{ layerId }}, "{{legendKeyShape}}", {{legendGradient}}, {{legendNumericPrecision}}, "{{legendLayout}}" );
+    {% if show_legend %}
+        calcColorLegend({{ color_stops }}, "Point Density", {{ layerId }}, "{{legend_key_shape}}", {{legend_gradient}}, {{legend_numeric_precision}}, "{{legend_layout}}" );
     {% endif %}
 
     map.on('style.load', function() {
@@ -17,10 +17,10 @@
             "type": "geojson",
             "data": {{ geojson_data }}, //data from dataframe output to geojson
             "buffer": 0,
-            "maxzoom": {{ clusterMaxZoom }} + 1,
+            "maxzoom": {{ cluster_max_zoom }} + 1,
             "cluster": true,
-            "clusterMaxZoom": {{ clusterMaxZoom }},
-            "clusterRadius": {{ clusterRadius }}
+            "cluster_max_zoom": {{ cluster_max_zoom }},
+            "cluster_radius": {{ cluster_radius }}
         });
 
         map.addLayer({
@@ -31,14 +31,14 @@
             "minzoom": {{ minZoom }},
             "layout": {
                 "text-field": "{point_count_abbreviated}",
-                "text-size" : generateInterpolateExpression('zoom', [[0, {{ labelSize }}],[22, 3* {{ labelSize }}]] ),
+                "text-size" : generateInterpolateExpression('zoom', [[0, {{ label_size }}],[22, 3* {{ label_size }}]] ),
             },
             "paint": {
-                "text-halo-color": "{{ labelHaloColor }}",
-                "text-halo-width": generatePropertyExpression('interpolate', 'zoom', [[0,{{ labelHaloWidth }}], [18,5* {{ labelHaloWidth }}]]),
-                "text-color": "{{ labelColor }}"
+                "text-halo-color": "{{ label_halo_color }}",
+                "text-halo-width": generatePropertyExpression('interpolate', 'zoom', [[0,{{ label_halo_width }}], [18,5* {{ label_halo_width }}]]),
+                "text-color": "{{ label_color }}"
             }
-        }, "{{belowLayer}}" )
+        }, "{{below_layer}}" )
 
         map.addLayer({
             "id": "circle-cluster{{ layerId }}",
@@ -48,10 +48,10 @@
             "minzoom": {{ minZoom }},
             "filter": ["has", "point_count"],
             "paint": {
-                "circle-color": generateInterpolateExpression( "point_count", {{ colorStops }} ),
-                "circle-radius" : generateInterpolateExpression( "point_count", {{ radiusStops }} ),
-                "circle-stroke-color": "{{ strokeColor }}",
-                "circle-stroke-width": generatePropertyExpression('interpolate', 'zoom', [[0,{{ strokeWidth }}], [18,5* {{ strokeWidth }}]]),
+                "circle-color": generateInterpolateExpression( "point_count", {{ color_stops }} ),
+                "circle-radius" : generateInterpolateExpression( "point_count", {{ radius_stops }} ),
+                "circle-stroke-color": "{{ stroke_color }}",
+                "circle-stroke-width": generatePropertyExpression('interpolate', 'zoom', [[0,{{ color_width }}], [18,5* {{ color_width }}]]),
                 "circle-opacity" : {{ opacity }},
                 "circle-stroke-opacity" : {{ opacity }}
             }
@@ -66,9 +66,9 @@
             "filter": ["!has", "point_count"],
             "paint": {
                 "circle-color": "{{ colorDefault }}",
-                "circle-radius" : generateInterpolateExpression( 'zoom', [[0, {{ radiusDefault }} ], [22,10 * {{ radiusDefault }}]]),
-                "circle-stroke-color": "{{ strokeColor }}",
-                "circle-stroke-width": generatePropertyExpression('interpolate', 'zoom', [[0,{{ strokeWidth }}], [18,5* {{ strokeWidth }}]]),
+                "circle-radius" : generateInterpolateExpression( 'zoom', [[0, {{ radius_default }} ], [22,10 * {{ radius_default }}]]),
+                "circle-stroke-color": "{{ stroke_color }}",
+                "circle-stroke-width": generatePropertyExpression('interpolate', 'zoom', [[0,{{ color_width }}], [18,5* {{ color_width }}]]),
                 "circle-opacity" : {{ opacity }},
                 "circle-stroke-opacity" : {{ opacity }}
             }

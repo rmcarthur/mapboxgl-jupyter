@@ -3,25 +3,25 @@
 {% block choropleth %}
 
     // extract JSON property used for data-driven styling to add to popup
-    {% if joinData %}
+    {% if join_data %}
 
-        let joinData = {{ joinData }};
+        let join_data = {{ join_data }};
         var popUpKeys = {},
             heightPopUpKeys = {};
 
         // Create filter for layers from join data
-        let layerFilter = ['in', "{{ vectorJoinDataProperty }}"]
+        let layerFilter = ['in', "{{ vector_join_data_property }}"]
         
-        joinData.forEach(function(row, index) {
-            popUpKeys[row["{{ dataJoinProperty }}"]] = row["{{ colorProperty }}"];
+        join_data.forEach(function(row, index) {
+            popUpKeys[row["{{ data_join_property }}"]] = row["{{ color_property }}"];
             
-            {% if extrudeChoropleth %}
-                {% if colorProperty != heightProperty %}
-                    heightPopUpKeys[row["{{ dataJoinProperty }}"]] = row["{{ heightProperty }}"];
+            {% if extrude_choropleth %}
+                {% if color_property != height_property %}
+                    heightPopUpKeys[row["{{ data_join_property }}"]] = row["{{ height_property }}"];
                 {% endif %}
             {% endif %}
 
-            layerFilter.push(row["{{ dataJoinProperty }}"]);
+            layerFilter.push(row["{{ data_join_property }}"]);
         });
 
     {% endif %}
@@ -29,7 +29,7 @@
     // Add vector data source
     map.addSource("data{{ layerId }}", {
         type: "vector",
-        url: "{{ vectorUrl }}",
+        url: "{{ vector_url }}",
     });
 
     // Add layer from the vector tile source with data-driven style
@@ -37,45 +37,45 @@
         "id": "choropleth-fill{{ layerId }}",
         "type": "fill",
         "source": "data{{ layerId }}",
-        "source-layer": "{{ vectorLayer }}",
+        "source-layer": "{{ vector_layer }}",
         "paint": {
             "fill-color": {
                 "type": "categorical",
-                "property": "{{ vectorJoinDataProperty }}", 
-                "stops": {{ vectorColorStops }}, 
-                "default": "{{ defaultColor }}"
+                "property": "{{ vector_join_data_property }}", 
+                "stops": {{ vector_color_stops }}, 
+                "default": "{{ default_color }}"
             }, 
             "fill-opacity": {{ opacity }}
         },
         filter: layerFilter
-    }, "{{ belowLayer }}");
+    }, "{{ below_layer }}");
 
     // Add border layer
     map.addLayer({
         "id": "choropleth-line{{ layerId }}",
         "source": "data{{ layerId }}",
-        "source-layer": "{{ vectorLayer }}",
+        "source-layer": "{{ vector_layer }}",
         "type": "line",
         "layout": {
             "line-join": "round",
             "line-cap": "round"
         },
         "paint": {
-            {% if lineDashArray %}
-                "line-dasharray": {{ lineDashArray }},
+            {% if line_dash_array %}
+                "line-dasharray": {{ line_dash_array }},
             {% endif %}
-            "line-color": "{{ lineColor }}",
-            "line-width": {{ lineWidth }},
+            "line-color": "{{ line_color }}",
+            "line-width": {{ line_width }},
             "line-opacity": {{ opacity }}
         },
         filter: layerFilter
-    }, "{{ belowLayer }}" );
+    }, "{{ below_layer }}" );
 
     // Add label layer
     map.addLayer({
         "id": "choropleth-label{{ layerId }}",
         "source": "data{{ layerId }}",
-        "source-layer": "{{ vectorLayer }}",
+        "source-layer": "{{ vector_layer }}",
         "type": "symbol",
         "layout": {
             {% if labelProperty %}
@@ -89,33 +89,33 @@
             "text-halo-width": 1
         },
         filter: layerFilter
-    }, "{{ belowLayer }}" );
+    }, "{{ below_layer }}" );
 
     // Optional extrusion layer
-    {% if extrudeChoropleth %}
+    {% if extrude_choropleth %}
     
         map.addLayer({
             id: "choropleth-extrusion{{ layerId }}",
             type: "fill-extrusion",            
             "source": "data{{ layerId }}",
-            "source-layer": "{{ vectorLayer }}",
+            "source-layer": "{{ vector_layer }}",
             paint: {
                 "fill-extrusion-opacity": {{ opacity }},
                 "fill-extrusion-color": {
                     "type": "categorical",
-                    "property": "{{ vectorJoinDataProperty }}", 
-                    "stops": {{ vectorColorStops }}, 
-                    "default": "{{ defaultColor }}"
+                    "property": "{{ vector_join_data_property }}", 
+                    "stops": {{ vector_color_stops }}, 
+                    "default": "{{ default_color }}"
                 },
                 "fill-extrusion-height": {
                     "type": "categorical",
-                    "property": "{{ vectorJoinDataProperty }}", 
-                    "stops": {{ vectorHeightStops }}, 
-                    "default": {{ defaultHeight }}
+                    "property": "{{ vector_join_data_property }}", 
+                    "stops": {{ vectorheight_stops }}, 
+                    "default": {{ default_height }}
                 }
             },
             filter: layerFilter
-        }, "{{ belowLayer }}");
+        }, "{{ below_layer }}");
 
     {% endif %}
 
@@ -141,11 +141,11 @@
         }
 
         // Add property from joined data to vector's feature popup
-        popup_html += '<li><b> ' + "{{ colorProperty }}".toUpperCase() + '</b>: ' + popUpKeys[f.properties["{{ vectorJoinDataProperty }}"]] + ' </li>'
+        popup_html += '<li><b> ' + "{{ color_property }}".toUpperCase() + '</b>: ' + popUpKeys[f.properties["{{ vector_join_data_property }}"]] + ' </li>'
         
-        {% if extrudeChoropleth %}
-            {% if colorProperty != heightProperty %}
-                popup_html += '<li><b> ' + "{{ heightProperty }}".toUpperCase() + '</b>: ' + heightPopUpKeys[f.properties["{{ vectorJoinDataProperty }}"]] + ' </li>'
+        {% if extrude_choropleth %}
+            {% if color_property != height_property %}
+                popup_html += '<li><b> ' + "{{ height_property }}".toUpperCase() + '</b>: ' + heightPopUpKeys[f.properties["{{ vector_join_data_property }}"]] + ' </li>'
             {% endif %}
         {% endif %}
 

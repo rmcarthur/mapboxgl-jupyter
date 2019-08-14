@@ -1,4 +1,4 @@
-from .map import Map
+from .map_base import MapBase
 from .layers import (
     CircleLayer,
     GraduatedCircleLayer,
@@ -72,7 +72,7 @@ class MapViz(object):
         :param legend_key_borders_on: boolean for whether to show/hide legend key borders
 
         """
-        self.__dict__['map'] = Map(
+        self.__dict__['map'] = MapBase(
             access_token=access_token,
             center=center,
             opacity=opacity,
@@ -101,7 +101,6 @@ class MapViz(object):
             self.map.__dict__[name] = value
         elif hasattr(self.layer, name):
             self.layer.__dict__[name] = value
-
 
     def as_iframe(self, html_data):
         """Build the HTML representation for the mapviz."""
@@ -141,7 +140,7 @@ class CircleViz(MapViz):
                  max_zoom=24,
                  *args,
                  **kwargs):
-        """Construct a Mapviz object
+        """Construct a CircleViz object
 
         :param label_property: property to use for marker label
         :param label_size: size of label text
@@ -206,7 +205,7 @@ class GraduatedCircleViz(MapViz):
                  legend_key_shape='circle',
                  *args,
                  **kwargs):
-        """Construct a Mapviz object
+        """Construct a GraduatedCircleViz object
 
         :param label_property: property to use for marker label
         :param color_property: property to determine circle color
@@ -261,14 +260,14 @@ class HeatmapViz(MapViz):
                  intensity_stops=None,
                  *args,
                  **kwargs):
-        """Construct a Mapviz object
+        """Construct a HeatmapViz object
 
         :param weight_property: property to determine heatmap weight. EX. "population"
         :param weight_stops: stops to determine heatmap weight.  EX. [[10, 0], [100, 1]]
         :param color_stops: stops to determine heatmap color.  EX. [[0, "red"], [0.5, "blue"], [1, "green"]]
         :param radius_stops: stops to determine heatmap radius based on zoom.  EX: [[0, 1], [12, 30]]
         :param intensity_stops: stops to determine the heatmap intensity based on zoom. EX: [[0, 0.1], [20, 5]]
-        
+
         """
         super(HeatmapViz, self).__init__(data, *args, **kwargs)
 
@@ -307,7 +306,7 @@ class ClusteredCircleViz(MapViz):
                  legend_key_shape='circle',
                  *args,
                  **kwargs):
-        """Construct a Mapviz object
+        """Construct a ClusteredCircleViz object
 
         :param color_property: property to determine circle color
         :param color_stops: property to determine circle color
@@ -367,7 +366,7 @@ class ChoroplethViz(MapViz):
                  legend_key_shape='rounded-square',
                  *args,
                  **kwargs):
-        """Construct a Mapviz object
+        """Construct a ChoroplethViz object
 
         :param data: can be either GeoJSON (containing polygon features) or JSON for data-join technique with vector polygons
         :param vector_url: optional property to define vector polygon source
@@ -425,7 +424,7 @@ class ChoroplethViz(MapViz):
 
 
 class ImageViz(MapViz):
-    """Create a image viz"""
+    """Create a image viz."""
 
     def __init__(self,
                  image,
@@ -433,7 +432,7 @@ class ImageViz(MapViz):
                  legend=False,
                  *args,
                  **kwargs):
-        """Construct a Mapviz object
+        """Construct a Mapviz object.
 
         :param coordinates: property to determine image coordinates (UL, UR, LR, LL).
             EX. [[-80.425, 46.437], [-71.516, 46.437], [-71.516, 37.936], [-80.425, 37.936]]
@@ -452,7 +451,7 @@ class ImageViz(MapViz):
 
 
 class RasterTilesViz(MapViz):
-    """Create a rastertiles map"""
+    """Create a rastertiles viz."""
 
     def __init__(self,
                  tiles_url,
@@ -463,7 +462,7 @@ class RasterTilesViz(MapViz):
                  legend=False,
                  *args,
                  **kwargs):
-        """Construct a Mapviz object
+        """Construct a RasterTilesViz object.
 
         :param tiles_url: property to determine tiles url endpoint
         :param tiles_size: property to determine displayed tiles size
@@ -487,7 +486,7 @@ class RasterTilesViz(MapViz):
 
 
 class LinestringViz(MapViz):
-    """Create a linestring viz"""
+    """Create a linestring viz."""
 
     def __init__(self,
                  data,
@@ -512,7 +511,7 @@ class LinestringViz(MapViz):
                  legend_key_shape='line',
                  *args,
                  **kwargs):
-        """Construct a Mapviz object
+        """Construct a LinestringViz object.
 
         :param data: can be either GeoJSON (containing polygon features) or JSON for data-join technique with vector polygons
         :param vector_url: optional property to define vector linestring source
@@ -563,9 +562,9 @@ class LinestringViz(MapViz):
         self.map.add_layer(self.layer)
 
     def generate_vector_color_map(self):
-        """Generate color stops array for use with match expression in mapbox template"""
+        """Generate color stops array for use with match expression in mapbox template."""
         return self.layer.generate_vector_color_map()
 
     def generate_vector_width_map(self):
-        """Generate width stops array for use with match expression in mapbox template"""
+        """Generate width stops array for use with match expression in mapbox template."""
         return self.layer.generate_vector_width_map()

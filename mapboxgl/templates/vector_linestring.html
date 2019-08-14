@@ -3,28 +3,28 @@
 {% block linestring %}
 
     // extract JSON property used for data-driven styling to add to popup
-    {% if joinData %}
+    {% if join_data %}
 
-        let joinData = {{ joinData }};
+        let join_data = {{ join_data }};
         var popUpKeys = {},
-            lineWidthPopUpKeys = {};
+            line_widthPopUpKeys = {};
 
         // Create filter for layers from join data
-        let layerFilter = ['in', "{{ vectorJoinDataProperty }}"]
+        let layerFilter = ['in', "{{ vector_join_data_property }}"]
         
-        joinData.forEach(function(row, index) {
+        join_data.forEach(function(row, index) {
 
-            {% if colorProperty %}
-                popUpKeys[row["{{ dataJoinProperty }}"]] = row["{{ colorProperty }}"];
+            {% if color_property %}
+                popUpKeys[row["{{ data_join_property }}"]] = row["{{ color_property }}"];
             {% endif %}
 
-            {% if widthProperty %}
-                {% if colorProperty != widthProperty %}
-                    lineWidthPopUpKeys[row["{{ dataJoinProperty }}"]] = row["{{ widthProperty }}"];
+            {% if width_property %}
+                {% if color_property != width_property %}
+                    line_widthPopUpKeys[row["{{ data_join_property }}"]] = row["{{ width_property }}"];
                 {% endif %}
             {% endif %}
 
-            layerFilter.push(row["{{ dataJoinProperty }}"]);
+            layerFilter.push(row["{{ data_join_property }}"]);
         });
 
     {% endif %}
@@ -32,46 +32,46 @@
     // Add vector data source
     map.addSource("data{{ layerId }}", {
         type: "vector",
-        url: "{{ vectorUrl }}",
+        url: "{{ vector_url }}",
     });
 
     // Add data layer from the vector tile source with data-driven style
     map.addLayer({
         "id": "linestring{{ layerId }}",
         "source": "data{{ layerId }}",
-        "source-layer": "{{ vectorLayer }}",
+        "source-layer": "{{ vector_layer }}",
         "type": "line",
         "layout": {
             "line-join": "round",
             "line-cap": "round"
         },
         "paint": {
-            {% if lineDashArray %}
-                "line-dasharray": {{ lineDashArray }},
+            {% if line_dash_array %}
+                "line-dasharray": {{ line_dash_array }},
             {% endif %}
             "line-color": {
                 "type": "categorical",
-                "property": "{{ vectorJoinDataProperty }}", 
-                "stops": {{ vectorColorStops }}, 
-                "default": "{{ defaultColor }}"
+                "property": "{{ vector_join_data_property }}", 
+                "stops": {{ vector_color_stops }}, 
+                "default": "{{ default_color }}"
             }, 
             "line-width": {
                 "type": "categorical",
-                "property": "{{ vectorJoinDataProperty }}", 
-                "stops": {{ vectorWidthStops }}, 
-                "default": {{ defaultWidth }}
+                "property": "{{ vector_join_data_property }}", 
+                "stops": {{ vector_width_stops }}, 
+                "default": {{ default_width }}
             },
 
             "line-opacity": {{ opacity }}
         },
         filter: layerFilter
-    }, "{{ belowLayer }}" );
+    }, "{{ below_layer }}" );
 
     // Add label layer
     map.addLayer({
         "id": "label{{ layerId }}",
         "source": "data{{ layerId }}",
-        "source-layer": "{{ vectorLayer }}",
+        "source-layer": "{{ vector_layer }}",
         "type": "symbol",
         "layout": {
             {% if labelProperty %}
@@ -81,12 +81,12 @@
             "text-offset": [0,-1]
         },
         "paint": {
-            "text-halo-color": "{{ labelHaloColor }}",
-            "text-halo-width": generatePropertyExpression('interpolate', 'zoom', [[0,{{ labelHaloWidth }}], [18,5* {{ labelHaloWidth }}]]),
-            "text-color": "{{ labelColor }}"
+            "text-halo-color": "{{ label_halo_color }}",
+            "text-halo-width": generatePropertyExpression('interpolate', 'zoom', [[0,{{ label_halo_width }}], [18,5* {{ label_halo_width }}]]),
+            "text-color": "{{ label_color }}"
         },
         filter: layerFilter
-    }, "{{belowLayer}}" );
+    }, "{{below_layer}}" );
 
 {% endblock linestring %}
 
@@ -110,13 +110,13 @@
         }
 
         // Add property from joined data to vector's feature popup
-        {% if colorProperty %}
-            popup_html += '<li><b> ' + "{{ colorProperty }}".toUpperCase() + '</b>: ' + popUpKeys[f.properties["{{ vectorJoinDataProperty }}"]] + ' </li>'
+        {% if color_property %}
+            popup_html += '<li><b> ' + "{{ color_property }}".toUpperCase() + '</b>: ' + popUpKeys[f.properties["{{ vector_join_data_property }}"]] + ' </li>'
         {% endif %}
 
-        {% if widthProperty %}
-            {% if colorProperty != widthProperty %}
-                popup_html += '<li><b> ' + "{{ widthProperty }}".toUpperCase() + '</b>: ' + lineWidthPopUpKeys[f.properties["{{ vectorJoinDataProperty }}"]] + ' </li>'
+        {% if width_property %}
+            {% if color_property != width_property %}
+                popup_html += '<li><b> ' + "{{ width_property }}".toUpperCase() + '</b>: ' + line_widthPopUpKeys[f.properties["{{ vector_join_data_property }}"]] + ' </li>'
             {% endif %}
         {% endif %}
 

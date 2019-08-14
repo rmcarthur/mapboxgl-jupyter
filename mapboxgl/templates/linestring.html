@@ -2,15 +2,15 @@
 
 {% block extra_javascript %}
 
-    {% if showLegend %}
-        {% if colorStops and colorProperty and widthProperty %}
-            {% if colorProperty != widthProperty %}
-                calcColorLegend({{ colorStops }}, "{{ colorProperty }} vs. {{ widthProperty }}", {{ layerId }}, "{{legendKeyShape}}", {{legendGradient}}, {{legendNumericPrecision}}, "{{legendLayout}}" );
+    {% if show_legend %}
+        {% if color_stops and color_property and width_property %}
+            {% if color_property != width_property %}
+                calcColorLegend({{ color_stops }}, "{{ color_property }} vs. {{ width_property }}", {{ layerId }}, "{{legend_key_shape}}", {{legend_gradient}}, {{legend_numeric_precision}}, "{{legend_layout}}" );
             {% else %}
-                calcColorLegend({{ colorStops }}, "{{ colorProperty }}", {{ layerId }}, "{{legendKeyShape}}", {{legendGradient}}, {{legendNumericPrecision}}, "{{legendLayout}}" );
+                calcColorLegend({{ color_stops }}, "{{ color_property }}", {{ layerId }}, "{{legend_key_shape}}", {{legend_gradient}}, {{legend_numeric_precision}}, "{{legend_layout}}" );
             {% endif %}
-        {% elif colorStops and colorProperty %}
-            calcColorLegend({{ colorStops }}, "{{ colorProperty }}", {{ layerId }}, "{{legendKeyShape}}", {{legendGradient}}, {{legendNumericPrecision}}, "{{legendLayout}}" );
+        {% elif color_stops and color_property %}
+            calcColorLegend({{ color_stops }}, "{{ color_property }}", {{ layerId }}, "{{legend_key_shape}}", {{legend_gradient}}, {{legend_numeric_precision}}, "{{legend_layout}}" );
         {% endif %}
     {% endif %}
 
@@ -36,27 +36,27 @@
                 "line-cap": "round"
             },
             "paint": {
-                {% if lineDashArray %}
-                    "line-dasharray": {{ lineDashArray }},
+                {% if line_dash_array %}
+                    "line-dasharray": {{ line_dash_array }},
                 {% endif %}
-                {% if colorProperty %}
-                    "line-color": generatePropertyExpression("{{ colorType }}", "{{ colorProperty }}", {{ colorStops }}, "{{ defaultColor }}"),
+                {% if color_property %}
+                    "line-color": generatePropertyExpression("{{ color_type }}", "{{ color_property }}", {{ color_stops }}, "{{ default_color }}"),
                 {% else %}
-                    "line-color": "{{ defaultColor }}",
+                    "line-color": "{{ default_color }}",
                 {% endif %}
-                {% if widthProperty %}
-                    "line-width": generatePropertyExpression("{{ widthType }}", "{{ widthProperty }}", {{ widthStops }}, {{ defaultWidth }}),
+                {% if width_property %}
+                    "line-width": generatePropertyExpression("{{ width_type }}", "{{ width_property }}", {{ width_stops }}, {{ default_width }}),
                 {% else %}
-                    "line-width": {{ defaultWidth }},
+                    "line-width": {{ default_width }},
                 {% endif %}
                 "line-opacity": {{ opacity }}
             }
-        }, "{{ belowLayer }}" );
+        }, "{{ below_layer }}" );
 
         // Add label layer
         map.addLayer({
             "id": "label{{ layerId }}",
-            "source": "data{{ layerId }}"",
+            "source": "data{{ layerId }}",
             "type": "symbol",
             "layout": {
                 {% if labelProperty %}
@@ -66,11 +66,11 @@
                 "text-offset": [0,-1]
             },
             "paint": {
-                "text-halo-color": "{{ labelHaloColor }}",
-                "text-halo-width": generatePropertyExpression('interpolate', 'zoom', [[0,{{ labelHaloWidth }}], [18,5* {{ labelHaloWidth }}]]),
-                "text-color": "{{ labelColor }}"
+                "text-halo-color": "{{ label_halo_color }}",
+                "text-halo-width": generatePropertyExpression('interpolate', 'zoom', [[0,{{ label_halo_width }}], [18,5* {{ label_halo_width }}]]),
+                "text-color": "{{ label_color }}"
             }
-        }, "{{belowLayer}}" );
+        }, "{{below_layer}}" );
 
         {% endblock linestring %}
         

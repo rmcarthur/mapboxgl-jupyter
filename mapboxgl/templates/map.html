@@ -92,16 +92,16 @@
 
 var legendHeader;
 
-function calcColorLegend(myColorStops, title, layerId, legendKeyShape, legendGradient, legendNumericPrecision, legendLayout) {
+function calcColorLegend(mycolor_stops, title, layerId, legend_key_shape, legend_gradient, legend_numeric_precision, legend_layout) {
 
     // create legend
     var container = document.getElementById('legend-container')
     var legend = document.createElement('div');
-    if (legendKeyShape === 'contiguous-bar') {
-        legend.className = 'legend ' + legendLayout + ' contig';
+    if (legend_key_shape === 'contiguous-bar') {
+        legend.className = 'legend ' + legend_layout + ' contig';
     }
     else {
-        legend.className = 'legend ' + legendLayout;
+        legend.className = 'legend ' + legend_layout;
     }
 
     legend.id = 'legend' + layerId;
@@ -119,7 +119,7 @@ function calcColorLegend(myColorStops, title, layerId, legendKeyShape, legendGra
     legend.appendChild(legendHeader);
     legend.appendChild(legendContent);
 
-    if (legendGradient === true) {
+    if (legend_gradient === true) {
         var gradientText = 'linear-gradient(to right, ';
         var gradient = document.createElement('div');
         gradient.className = 'gradient-bar';
@@ -127,11 +127,11 @@ function calcColorLegend(myColorStops, title, layerId, legendKeyShape, legendGra
     }
 
     // calculate a legend entries on a Mapbox GL Style Spec property function stops array
-    for (p = 0; p < myColorStops.length; p++) {
+    for (p = 0; p < mycolor_stops.length; p++) {
         if (!!document.getElementById('legend-points-value-' + layerId + '-' + p)) {
             //update the legend if it already exists
-            document.getElementById('legend-points-value-' + layerId + '-' + p).textContent = myColorStops[p][0];
-            document.getElementById('legend-points-id-' + layerId + '-' + p).style.backgroundColor = myColorStops[p][1];
+            document.getElementById('legend-points-value-' + layerId + '-' + p).textContent = mycolor_stops[p][0];
+            document.getElementById('legend-points-id-' + layerId + '-' + p).style.backgroundColor = mycolor_stops[p][1];
         }
         else {
             // create the legend if it doesn't yet exist
@@ -139,9 +139,9 @@ function calcColorLegend(myColorStops, title, layerId, legendKeyShape, legendGra
             item.className = 'legend-item';
 
             var key = document.createElement('span');
-            key.className = 'legend-key ' + legendKeyShape;
+            key.className = 'legend-key ' + legend_key_shape;
             key.id = 'legend-points-id-' + p;
-            key.style.backgroundColor = myColorStops[p][1];
+            key.style.backgroundColor = mycolor_stops[p][1];
 
             var value = document.createElement('span');
             value.className = 'legend-value';
@@ -154,29 +154,29 @@ function calcColorLegend(myColorStops, title, layerId, legendKeyShape, legendGra
             data = document.getElementById('legend-points-value-' + layerId + '-' + p)
 
             // round number values in legend if precision defined
-            if ((typeof(myColorStops[p][0]) == 'number') && (typeof(legendNumericPrecision) == 'number')) {
-                data.textContent = myColorStops[p][0].toFixed(legendNumericPrecision);
+            if ((typeof(mycolor_stops[p][0]) == 'number') && (typeof(legend_numeric_precision) == 'number')) {
+                data.textContent = mycolor_stops[p][0].toFixed(legend_numeric_precision);
             }
             else {
-                data.textContent = myColorStops[p][0];
+                data.textContent = mycolor_stops[p][0];
             }
 
             // add color stop to gradient list
-            if (legendGradient === true) {
-                if (p < myColorStops.length - 1) {
-                    gradientText = gradientText + myColorStops[p][1] + ', ';
+            if (legend_gradient === true) {
+                if (p < mycolor_stops.length - 1) {
+                    gradientText = gradientText + mycolor_stops[p][1] + ', ';
                 }
                 else {
-                    gradientText = gradientText + myColorStops[p][1] + ')';
+                    gradientText = gradientText + mycolor_stops[p][1] + ')';
                 }
-                if (legendLayout === 'vertical') {
+                if (legend_layout === 'vertical') {
                     gradientText = gradientText.replace('to right', 'to bottom');
                 }
             }
         }
     }
 
-    if (legendGradient === true) {
+    if (legend_gradient === true) {
         // convert to gradient scale appearance
         gradient.style.background = gradientText;
 
@@ -186,7 +186,7 @@ function calcColorLegend(myColorStops, title, layerId, legendKeyShape, legendGra
             keys[i].style.visibility = 'hidden';
         }
 
-        if (legendLayout === 'vertical') {
+        if (legend_layout === 'vertical') {
             gradient.style.height = (legendContent.offsetHeight - 6) + 'px';
         }
     }

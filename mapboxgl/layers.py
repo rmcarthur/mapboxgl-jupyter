@@ -2,9 +2,8 @@ import json
 
 import numpy
 
-from mapboxgl.utils import color_map, height_map
+from mapboxgl.utils import color_map, height_map, img_encode, numeric_map
 from mapboxgl import templates
-from mapboxgl.utils import img_encode, numeric_map
 
 
 class AbstractLayer():
@@ -53,12 +52,12 @@ class AbstractLayer():
     def create_html(self):
         options = dict(
             opacity=self.opacity,
-            belowLayer=self.below_layer,
-            showLegend=self.legend,
-            legendLayout=self.legend_layout,
-            legendGradient=json.dumps(self.legend_gradient),
-            legendNumericPrecision=json.dumps(self.legend_text_numeric_precision),
-            legendKeyShape=self.legend_key_shape,
+            below_layer=self.below_layer,
+            show_legend=self.legend,
+            legend_layout=self.legend_layout,
+            legend_gradient=json.dumps(self.legend_gradient),
+            legend_numeric_precision=json.dumps(self.legend_text_numeric_precision),
+            legend_key_shape=self.legend_key_shape,
             layerId=self.layer_id,
             template=self.template,
             minZoom=self.min_zoom,
@@ -98,7 +97,7 @@ class CircleLayer(AbstractLayer):
                  legend_key_shape='circle',
                  *args,
                  **kwargs):
-        """Construct a Mapviz object
+        """Construct a CircleLayer object
 
         :param label_property: property to use for marker label
         :param label_size: size of label text
@@ -135,17 +134,17 @@ class CircleLayer(AbstractLayer):
         """Update map template variables specific to circle visual"""
         options.update(dict(
             geojson_data=json.dumps(self.data, ensure_ascii=False),
-            colorProperty=self.color_property,
-            colorType=self.color_function_type,
-            colorStops=self.color_stops,
-            strokeWidth=self.stroke_width,
-            strokeColor=self.stroke_color,
+            color_property=self.color_property,
+            color_type=self.color_function_type,
+            color_stops=self.color_stops,
+            color_width=self.stroke_width,
+            stroke_color=self.stroke_color,
             radius=self.radius,
-            defaultColor=self.color_default,
-            labelColor=self.label_color,
-            labelSize=self.label_size,
-            labelHaloColor=self.label_halo_color,
-            labelHaloWidth=self.label_halo_width,
+            default_color=self.color_default,
+            label_color=self.label_color,
+            label_size=self.label_size,
+            label_halo_color=self.label_halo_color,
+            label_halo_width=self.label_halo_width,
         ))
 
 
@@ -172,7 +171,7 @@ class GraduatedCircleLayer(AbstractLayer):
                  legend_key_shape='circle',
                  *args,
                  **kwargs):
-        """Construct a Mapviz object
+        """Construct a GraduatedCircleLayer object
 
         :param label_property: property to use for marker label
         :param color_property: property to determine circle color
@@ -211,20 +210,20 @@ class GraduatedCircleLayer(AbstractLayer):
         """Update map template variables specific to graduated circle visual"""
         options.update(dict(
             geojson_data=json.dumps(self.data, ensure_ascii=False),
-            colorProperty=self.color_property,
-            colorStops=self.color_stops,
-            colorType=self.color_function_type,
+            color_property=self.color_property,
+            color_stops=self.color_stops,
+            color_type=self.color_function_type,
             radiusType=self.radius_function_type,
-            defaultColor=self.color_default,
+            default_color=self.color_default,
             defaultRadius=self.radius_default,
             radiusProperty=self.radius_property,
-            radiusStops=self.radius_stops,
-            strokeWidth=self.stroke_width,
-            strokeColor=self.stroke_color,
-            labelColor=self.label_color,
-            labelSize=self.label_size,
-            labelHaloColor=self.label_halo_color,
-            labelHaloWidth=self.label_halo_width
+            radius_stops=self.radius_stops,
+            color_width=self.stroke_width,
+            stroke_color=self.stroke_color,
+            label_color=self.label_color,
+            label_size=self.label_size,
+            label_halo_color=self.label_halo_color,
+            label_halo_width=self.label_halo_width
         ))
 
 
@@ -241,7 +240,7 @@ class HeatmapLayer(AbstractLayer):
                  intensity_stops=None,
                  *args,
                  **kwargs):
-        """Create a heatmap layer
+        """Create a HeatmapLayer object
 
         :param weight_property: property to determine heatmap weight. EX. "population"
         :param weight_stops: stops to determine heatmap weight.  EX. [[10, 0], [100, 1]]
@@ -266,11 +265,11 @@ class HeatmapLayer(AbstractLayer):
         """Update map template variables specific to heatmap visual"""
         options.update(dict(
             geojson_data=json.dumps(self.data, ensure_ascii=False),
-            colorStops=self.color_stops,
-            radiusStops=self.radius_stops,
-            weightProperty=self.weight_property,
-            weightStops=self.weight_stops,
-            intensityStops=self.intensity_stops,
+            color_stops=self.color_stops,
+            radius_stops=self.radius_stops,
+            weight_property=self.weight_property,
+            weight_stops=self.weight_stops,
+            intensity_stops=self.intensity_stops,
         ))
 
 
@@ -295,7 +294,7 @@ class ClusteredCircleLayer(AbstractLayer):
                  legend_key_shape='circle',
                  *args,
                  **kwargs):
-        """Construct a Mapviz object
+        """Construct a ClusteredCileLayer object
 
         :param color_property: property to determine circle color
         :param color_stops: property to determine circle color
@@ -317,8 +316,8 @@ class ClusteredCircleLayer(AbstractLayer):
         self.label_halo_width = label_halo_width
         self.color_stops = color_stops
         self.radius_stops = radius_stops
-        self.clusterRadius = cluster_radius
-        self.clusterMaxZoom = cluster_maxzoom
+        self.cluster_radius = cluster_radius
+        self.cluster_max_zoom = cluster_maxzoom
         self.radius_default = radius_default
         self.color_default = color_default
         self.stroke_color = stroke_color
@@ -330,18 +329,18 @@ class ClusteredCircleLayer(AbstractLayer):
         """Update map template variables specific to a clustered circle visual"""
         options.update(dict(
             geojson_data=json.dumps(self.data, ensure_ascii=False),
-            colorStops=self.color_stops,
+            color_stops=self.color_stops,
             colorDefault=self.color_default,
-            radiusStops=self.radius_stops,
-            clusterRadius=self.clusterRadius,
-            clusterMaxZoom=self.clusterMaxZoom,
-            strokeWidth=self.stroke_width,
-            strokeColor=self.stroke_color,
-            radiusDefault=self.radius_default,
-            labelColor=self.label_color,
-            labelSize=self.label_size,
-            labelHaloColor=self.label_halo_color,
-            labelHaloWidth=self.label_halo_width
+            radius_stops=self.radius_stops,
+            cluster_radius=self.cluster_radius,
+            cluster_max_zoom=self.cluster_max_zoom,
+            color_width=self.stroke_width,
+            stroke_color=self.stroke_color,
+            radius_default=self.radius_default,
+            label_color=self.label_color,
+            label_size=self.label_size,
+            label_halo_color=self.label_halo_color,
+            label_halo_width=self.label_halo_width
         ))
 
 
@@ -368,7 +367,7 @@ class ChoroplethLayer(AbstractLayer):
                  height_function_type='interpolate',
                  *args,
                  **kwargs):
-        """Construct a Mapviz object
+        """Construct a ChoroplethLayer object
 
         :param data: can be either GeoJSON (containing polygon features) or JSON for data-join technique with vector polygons
         :param vector_url: optional property to define vector polygon source
@@ -464,37 +463,37 @@ class ChoroplethLayer(AbstractLayer):
 
         # common variables for vector and geojson-based choropleths
         options.update(dict(
-            colorStops=self.color_stops,
-            colorProperty=self.color_property,
-            colorType=self.color_function_type,
-            defaultColor=self.color_default,
-            lineColor=self.line_color,
-            lineDashArray=self.line_dash_array,
-            lineStroke=self.line_stroke,
-            lineWidth=self.line_width,
-            extrudeChoropleth=self.extrude
+            color_stops=self.color_stops,
+            color_property=self.color_property,
+            color_type=self.color_function_type,
+            default_color=self.color_default,
+            line_color=self.line_color,
+            line_dash_array=self.line_dash_array,
+            line_stroke=self.line_stroke,
+            line_width=self.line_width,
+            extrude_choropleth=self.extrude
         ))
         if self.extrude:
             options.update(dict(
-                heightType=self.height_function_type,
-                heightProperty=self.height_property,
-                heightStops=self.height_stops,
-                defaultHeight=self.height_default,
+                height_type=self.height_function_type,
+                height_property=self.height_property,
+                height_stops=self.height_stops,
+                default_height=self.height_default,
             ))
 
         # vector-based choropleth map variables
         if self.vector_source:
             options.update(dict(
-                vectorUrl=self.vector_url,
-                vectorLayer=self.vector_layer_name,
-                vectorColorStops=self.generate_vector_color_map(),
-                vectorJoinDataProperty=self.vector_join_property,
-                joinData=json.dumps(self.data, ensure_ascii=False),
-                dataJoinProperty=self.data_join_property,
+                vector_url=self.vector_url,
+                vector_layer=self.vector_layer_name,
+                vector_color_stops=self.generate_vector_color_map(),
+                vector_join_data_property=self.vector_join_property,
+                join_data=json.dumps(self.data, ensure_ascii=False),
+                data_join_property=self.data_join_property,
             ))
             if self.extrude:
                 options.update(dict(
-                    vectorHeightStops=self.generate_vector_height_map(),
+                    vectorheight_stops=self.generate_vector_height_map(),
                 ))
 
         # geojson-based choropleth map variables
@@ -703,40 +702,40 @@ class LinestringLayer(AbstractLayer):
 
         # common variables for vector and geojson-based linestring maps
         options.update(dict(
-            colorStops=self.color_stops,
-            colorProperty=self.color_property,
-            colorType=self.color_function_type,
-            defaultColor=self.color_default,
-            lineColor=self.color_default,
-            lineDashArray=self.line_dash_array,
-            lineStroke=self.line_stroke,
-            widthStops=self.line_width_stops,
-            widthProperty=self.line_width_property,
-            widthType=self.line_width_function_type,
-            defaultWidth=self.line_width_default,
-            labelColor=self.label_color,
-            labelSize=self.label_size,
-            labelHaloColor=self.label_halo_color,
-            labelHaloWidth=self.label_halo_width
+            color_stops=self.color_stops,
+            color_property=self.color_property,
+            color_type=self.color_function_type,
+            default_color=self.color_default,
+            line_color=self.color_default,
+            line_dash_array=self.line_dash_array,
+            line_stroke=self.line_stroke,
+            width_stops=self.line_width_stops,
+            width_property=self.line_width_property,
+            width_type=self.line_width_function_type,
+            default_width=self.line_width_default,
+            label_color=self.label_color,
+            label_size=self.label_size,
+            label_halo_color=self.label_halo_color,
+            label_halo_width=self.label_halo_width
         ))
 
         # vector-based linestring map variables
         if self.vector_source:
             options.update(dict(
-                vectorUrl=self.vector_url,
-                vectorLayer=self.vector_layer_name,
-                vectorJoinDataProperty=self.vector_join_property,
-                vectorColorStops=[[0, self.color_default]],
-                vectorWidthStops=[[0, self.line_width_default]],
-                joinData=json.dumps(self.data, ensure_ascii=False),
-                dataJoinProperty=self.data_join_property,
+                vector_url=self.vector_url,
+                vector_layer=self.vector_layer_name,
+                vector_join_data_property=self.vector_join_property,
+                vector_color_stops=[[0, self.color_default]],
+                vector_width_stops=[[0, self.line_width_default]],
+                join_data=json.dumps(self.data, ensure_ascii=False),
+                data_join_property=self.data_join_property,
             ))
 
             if self.color_property:
-                options.update(dict(vectorColorStops=self.generate_vector_color_map()))
+                options.update(dict(vector_color_stops=self.generate_vector_color_map()))
 
             if self.line_width_property:
-                options.update(dict(vectorWidthStops=self.generate_vector_width_map()))
+                options.update(dict(vector_width_stops=self.generate_vector_width_map()))
 
         # geojson-based linestring map variables
         else:

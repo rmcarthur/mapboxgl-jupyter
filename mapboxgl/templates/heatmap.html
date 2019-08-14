@@ -18,21 +18,21 @@
             "maxzoom": {{ maxZoom }},
             "minzoom": {{ minZoom }},
             "paint": {
-                {% if radiusStops %}
-                    "heatmap-radius": generatePropertyExpression('interpolate', 'zoom', {{ radiusStops }}),
+                {% if radius_stops %}
+                    "heatmap-radius": generatePropertyExpression('interpolate', 'zoom', {{ radius_stops }}),
                 {% endif %}
-                {% if weightProperty and weightStops %}
-                    "heatmap-weight": generateInterpolateExpression( "{{ weightProperty }}", {{ weightStops }} ),
+                {% if weight_property and weight_stops %}
+                    "heatmap-weight": generateInterpolateExpression( "{{ weight_property }}", {{ weight_stops }} ),
                 {% endif %}
-                {% if intensityStops %}
-                    "heatmap-intensity": generateInterpolateExpression('zoom', {{ intensityStops }} ),
+                {% if intensity_stops %}
+                    "heatmap-intensity": generateInterpolateExpression('zoom', {{ intensity_stops }} ),
                 {% endif %}
-                {% if colorStops %}
-                    "heatmap-color" : generateInterpolateExpression('heatmap-density', {{ colorStops }} ),
+                {% if color_stops %}
+                    "heatmap-color" : generateInterpolateExpression('heatmap-density', {{ color_stops }} ),
                 {% endif %}
                 "heatmap-opacity" : {{ opacity }}
             }
-        }, "{{belowLayer}}" );
+        }, "{{below_layer}}" );
 
     });
 

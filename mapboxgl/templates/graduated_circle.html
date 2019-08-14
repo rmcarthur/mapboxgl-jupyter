@@ -2,14 +2,14 @@
 
 <!-- update legend item key style -->
 {% block extra_css %}
-    .gradient-bar.bordered, .legend-key.bordered { border: solid {{ strokeColor }} {{ strokeWidth }}px; }
+    .gradient-bar.bordered, .legend-key.bordered { border: solid {{ stroke_color }} {{ color_width }}px; }
 {% endblock extra_css %}
 
 {% block extra_javascript %}
     
-    {% if showLegend %}
-        {% if colorStops and colorProperty and radiusProperty %}
-            calcColorLegend({{ colorStops }}, "{{ colorProperty }} vs. {{ radiusProperty }}", {{ layerId }}, "{{legendKeyShape}}", {{legendGradient}}, {{legendNumericPrecision}}, "{{legendLayout}}" );
+    {% if show_legend %}
+        {% if color_stops and color_property and radiusProperty %}
+            calcColorLegend({{ color_stops }}, "{{ color_property }} vs. {{ radiusProperty }}", {{ layerId }}, "{{legend_key_shape}}", {{legend_gradient}}, {{legend_numeric_precision}}, "{{legend_layout}}" );
         {% endif %}
     {% endif %}
 
@@ -32,15 +32,15 @@
                 {% if labelProperty %}
                 "text-field": "{{ labelProperty }}",
                 {% endif %}
-                "text-size" : generateInterpolateExpression('zoom', [[0, {{ labelSize }}],[22, 3* {{ labelSize }}]] ),
+                "text-size" : generateInterpolateExpression('zoom', [[0, {{ label_size }}],[22, 3* {{ label_size }}]] ),
                 "text-offset": [0,-1]
             },
             "paint": {
-                "text-halo-color": "{{ labelHaloColor }}",
-                "text-halo-width": generatePropertyExpression('interpolate', 'zoom', [[0,{{ labelHaloWidth }}], [18,5* {{ labelHaloWidth }}]]),
-                "text-color": "{{ labelColor }}"
+                "text-halo-color": "{{ label_halo_color }}",
+                "text-halo-width": generatePropertyExpression('interpolate', 'zoom', [[0,{{ label_halo_width }}], [18,5* {{ label_halo_width }}]]),
+                "text-color": "{{ label_color }}"
             }
-        }, "{{belowLayer}}" )
+        }, "{{below_layer}}" )
 
         map.addLayer({
             "id": "circle{{ layerId }}",
@@ -49,18 +49,18 @@
             "maxzoom": {{ maxZoom }},
             "minzoom": {{ minZoom }},
             "paint": {
-                {% if colorProperty %}
-                    "circle-color": generatePropertyExpression("{{ colorType }}", "{{ colorProperty }}", {{ colorStops }}, "{{ defaultColor }}" ),
+                {% if color_property %}
+                    "circle-color": generatePropertyExpression("{{ color_type }}", "{{ color_property }}", {{ color_stops }}, "{{ default_color }}" ),
                     {% else %}
-                    "circle-color": "{{ defaultColor }}",
+                    "circle-color": "{{ default_color }}",
                 {% endif %}
                 {% if radiusProperty %}
-                    "circle-radius" : generatePropertyExpression("{{ radiusType }}", "{{ radiusProperty }}", {{ radiusStops }}, {{ defaultRadius }} ),
+                    "circle-radius" : generatePropertyExpression("{{ radiusType }}", "{{ radiusProperty }}", {{ radius_stops }}, {{ defaultRadius }} ),
                     {% else %}
                     "circle-radius": {{ defaultRadius }},
                 {% endif %}
-                "circle-stroke-color": "{{ strokeColor }}",
-                "circle-stroke-width": generatePropertyExpression('interpolate', 'zoom', [[0,{{ strokeWidth }}], [18,5* {{ strokeWidth }}]]),
+                "circle-stroke-color": "{{ stroke_color }}",
+                "circle-stroke-width": generatePropertyExpression('interpolate', 'zoom', [[0,{{ color_width }}], [18,5* {{ color_width }}]]),
                 "circle-opacity" : {{ opacity }},
                 "circle-stroke-opacity" : {{ opacity }}
             }

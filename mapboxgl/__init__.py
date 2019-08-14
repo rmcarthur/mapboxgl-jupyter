@@ -40,5 +40,5 @@ __all__ = [
     'RasterTilesLayer',
     'ChoroplethLayer',
     'LinestringLayer',
-    'Map',
+    'MapBase',
 ]
