@@ -2,7 +2,7 @@ import json
 
 import numpy
 
-from mapboxgl.utils import color_map, height_map, img_encode, numeric_map
+from mapboxgl.utils import color_map, height_map, img_encode, numeric_map, geojson_to_dict_list, str_to_geojson_dict
 from mapboxgl import templates
 
 
@@ -34,7 +34,10 @@ class AbstractLayer():
                 :param legend_text_numeric_precision: decimal precision for numeric legend values
                 :param legend_key_shape: shape of the legend item keys, default varies by viz type; one of square, contiguous_bar, rounded-square, circle, line
                 """
-        self.data = data
+        if type(data) is str:
+            self.data = str_to_geojson_dict(data)
+        else:
+            self.data = data
         self.opacity = opacity
         self.below_layer = below_layer
         self.legend = legend

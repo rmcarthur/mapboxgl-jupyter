@@ -11,6 +11,51 @@ from matplotlib.image import imsave
 from colour import Color as Colour
 
 
+
+def geojson_to_dict_list(data):
+    """Parse GeoJSON-formatted information in <data> to list of Python dicts"""
+    
+    # return data formatted as list or dict
+    if type(data) in (list, dict):
+        return data
+
+    # read from data defined as local file address
+    try:
+        with open(data, 'r') as f:
+            features = json.load(f)['features']
+
+    # if data is defined as a URL, load JSON object from address
+    except IOError:
+        features = requests.get(data).json()['features']
+
+    except:
+        raise SourceDataError('MapViz data must be valid GeoJSON or JSON.  Please check your <data> parameter.')
+
+    return [feature['properties'] for feature in features]
+
+
+def str_to_geojson_dict(data):
+    """Parse GeoJSON-formatted information in <data> to a single Python dicts"""
+    
+    # return data formatted as list or dict
+    if type(data) in (list, dict):
+        return data
+
+    # read from data defined as local file address
+    try:
+        with open(data, 'r') as f:
+            features = json.load(f)
+
+    # if data is defined as a URL, load JSON object from address
+    except IOError:
+        features = requests.get(data).json()
+
+    except:
+        raise SourceDataError('MapViz data must be valid GeoJSON or JSON.  Please check your <data> parameter.')
+
+    return features
+
+
 def row_to_geojson(row, lon, lat, precision):
     """Convert a pandas dataframe row to a geojson format object.  Converts all datetimes to epoch seconds.
     """

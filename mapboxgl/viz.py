@@ -1,5 +1,6 @@
 from .map_base import MapBase
 from .layers import (
+    AbstractLayer,
     CircleLayer,
     GraduatedCircleLayer,
     HeatmapLayer,

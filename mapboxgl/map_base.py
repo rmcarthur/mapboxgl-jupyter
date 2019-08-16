@@ -6,12 +6,12 @@ from IPython.core.display import HTML, display
 
 from mapboxgl.errors import TokenError
 from mapboxgl import templates
-
+from mapboxgl.utils import geojson_to_dict_list
 
 GL_JS_VERSION = 'v0.49.0'
 
 
-class Map(object):
+class MapBase(object):
 
     def __init__(self,
                  access_token=None,
@@ -65,6 +65,7 @@ class Map(object):
             raise TokenError('Mapbox access token must be public (pk), not secret (sk). ' \
                              'Please sign up at https://www.mapbox.com/signup/ to get a public token. ' \
                              'If you already have an account, you can retreive your token at https://www.mapbox.com/account/.')
+        
         self.access_token = access_token
         self.template = 'map'
         self.div_id = div_id

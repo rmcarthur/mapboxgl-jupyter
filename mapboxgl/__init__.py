@@ -20,7 +20,7 @@ from .layers import (
     LinestringLayer,
 )
 
-from .map import Map
+from .map_base import MapBase
 
 __version__ = "0.9.0"
 __all__ = [
